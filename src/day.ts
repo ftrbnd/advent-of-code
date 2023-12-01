@@ -8,13 +8,13 @@ abstract class Day {
         this.id = id;
     }
     
-    async partOne(): Promise<string> {
+    async partOne(): Promise<string | number> {
         const content = await fs.promises.readFile(`./inputs/day${this.id}/part1.txt`);
         const result = this.solveForPartOne(content.toString());
         return result;
     }   
 
-    abstract solveForPartOne(input: string) : string;
+    abstract solveForPartOne(input: string) : string | number;
 
     async partTwo(): Promise<string> {
         const content = await fs.promises.readFile(`./inputs/day${this.id}/part2.txt`);
