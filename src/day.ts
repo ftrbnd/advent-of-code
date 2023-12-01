@@ -16,13 +16,13 @@ abstract class Day {
 
     abstract solveForPartOne(input: string) : string | number;
 
-    async partTwo(): Promise<string> {
+    async partTwo(): Promise<string | number> {
         const content = await fs.promises.readFile(`./inputs/day${this.id}/part2.txt`);
         const result = this.solveForPartTwo(content.toString());
         return result;
     }
 
-    abstract solveForPartTwo(input: string) : string;
+    abstract solveForPartTwo(input: string) : string | number;
 }
 
 export {Day};
