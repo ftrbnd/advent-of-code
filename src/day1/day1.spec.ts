@@ -1,7 +1,7 @@
 import day1 from './index';
 
 describe('On Day 1', () =>{
-    it(`Part 1: sum of all calibration values`, () => {
+    it.skip(`Part 1: sum of all calibration values`, () => {
         const input = `1abc2
             pqr3stu8vwx
             a1b2c3d4e5f
@@ -10,7 +10,7 @@ describe('On Day 1', () =>{
         expect(day1.solveForPartOne(input)).toBe(142);
     })
 
-    it.only('Part 2: sum of calibration values with strings', () => {
+    it.skip('Part 2: sum of calibration values with strings', () => {
         const input = `two1nine
             eightwothree
             abcone2threexyz

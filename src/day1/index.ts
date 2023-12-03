@@ -1,8 +1,5 @@
 import { Day } from "../day";
-
-const splitLines = (input: string) => {
-    return input.split("\n");
-}
+import { splitLines } from "../util/splitLines";
 
 class Day1 extends Day {
 
