@@ -31,7 +31,7 @@ class Day3 extends Day {
         return false;
     }
 
-    determineNumber(graph: string[], row: number, col: number) {
+    determineCurrentNumber(graph: string[], row: number, col: number) {
         // traverse left to beginning of number
         let tempCol = col;
         while (this.withinGraph(graph, row, tempCol) && digits.includes(graph[row][tempCol])) {
@@ -46,18 +46,12 @@ class Day3 extends Day {
             tempCol++;
         }
 
-        console.log('NUMBER: ', parseInt(number));
-
-        // replace this number with . to prevent duplicates
-        // TODO: This marks the whole line with '.'?
-        console.log('graph before: ', graph[row]);
+        // replace this number with '.' to prevent duplicates
         graph[row] = graph[row]
             .split('')
-            .map((char, index) => {
-                index <= tempCol ? '.' : char;
-            }).join('');
-        console.log('graph after: ', graph[row]);
-
+            .map((char, index) => index < tempCol && digits.includes(char) ? '.' : char)
+            .join('');
+        
         return parseInt(number);
     }
     
@@ -71,13 +65,12 @@ class Day3 extends Day {
                 // if digit found: search one level around digit for a symbol
                 if (digits.includes(lines[row][col]) && this.adjacentToSymbol(lines, row, col)) {
                     // determine the number we are on
-                    const number = this.determineNumber(lines, row, col);
+                    const number = this.determineCurrentNumber(lines, row, col);
                     partNumbers.push(number);
                 }
             }
         }
 
-        console.log('Part numbers: ', partNumbers);
         return partNumbers.reduce((a, b) => a + b);
     }
 
