@@ -44,18 +44,10 @@ class Day3 extends Day {
             tempCol++;
         }
 
-        const visited: number[][] = [];
         // replace this number with '.' to prevent duplicates
-        // TODO: this creates problems for part 2
         graph[row] = graph[row]
             .split('')
-            .map((char, index) => {
-                if (index < tempCol && digits.includes(char)) {
-                    visited.push([row, index]);
-                    return '.';
-                }
-                return char;
-            })
+            .map((char, index) => index < tempCol && digits.includes(char) ? '.' : char)
             .join('');
 
         return {
@@ -81,18 +73,55 @@ class Day3 extends Day {
 
         return partNumbers.reduce((a, b) => a + b);
     }
+    
+    determineCurrentNumberWithoutReplacing(graph: string[], row: number, col: number) {
+        // traverse left to beginning of number
+        let tempCol = col;
+        while (this.withinGraph(graph, row, tempCol) && digits.includes(graph[row][tempCol])) {
+            tempCol--;
+        }
+        tempCol++;
+
+        const start = tempCol;
+
+        let number = '';
+        // traverse right to end of number
+        while (this.withinGraph(graph, row, tempCol) && digits.includes(graph[row][tempCol])) {
+            number += graph[row][tempCol]
+            tempCol++;
+        }
+
+        const end = tempCol - 1;
+
+        const columnsCovered = [start, end]
+
+        return {
+            currentNumber: parseInt(number),
+            rowCovered: row,
+            columnsCovered // inclusive
+        };
+    }
 
     // travel around asterisk * and find numbers adjacent to it
     findAdjacentNumbers(graph: string[], row: number, col: number): number[] {
         const directions = [[0, 1], [0, -1], [1, 0], [-1, 0], [1, 1], [-1, 1], [1, -1], [-1, -1]];
         const numbers: number[] = []; 
 
+        const rowsCovered: number[] = [];
+        const columnRangesCovered: number[][] = [];
+
         for (const dir of directions) {
             const [newRow, newCol] = [row + dir[0], col + dir[1]];
 
+            if (rowsCovered.includes(newRow) && columnRangesCovered.some(colRange => colRange[0] <= newCol && newCol <= colRange[1])) {
+                continue;
+            }
+
             if (this.withinGraph(graph, newRow, newCol) && digits.includes(graph[newRow][newCol])) {
-                const { currentNumber } = this.determineCurrentNumber(graph, newRow, newCol);
+                const { currentNumber, rowCovered, columnsCovered } = this.determineCurrentNumberWithoutReplacing(graph, newRow, newCol);
                 numbers.push(currentNumber);
+                rowsCovered.push(rowCovered);
+                columnRangesCovered.push(columnsCovered);
             }
         }
 
