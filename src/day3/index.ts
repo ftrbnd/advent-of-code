@@ -21,10 +21,8 @@ class Day3 extends Day {
         for (const dir of directions) {
             const [newRow, newCol] = [row + dir[0], col + dir[1]];
 
-            if (this.withinGraph(graph, newRow, newCol)) {
-                if (!notSymbols.includes(graph[newRow][newCol])) {
-                    return true;
-                }
+            if (this.withinGraph(graph, newRow, newCol) && !notSymbols.includes(graph[newRow][newCol])) {
+                return true;
             }
         }
 
@@ -56,7 +54,8 @@ class Day3 extends Day {
     }
     
     solveForPartOne(input: string): number {
-        const lines = splitLines(input);
+        const lines = splitLines(input).map(line => line.replace('\r', ''))
+        
         const partNumbers: number[] = [];
 
         // traverse the schematic
