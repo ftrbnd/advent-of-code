@@ -40,8 +40,39 @@ class Day4 extends Day {
         return pointsPerCard.reduce((a, b) => a + b);
     }
 
-    solveForPartTwo(input: string): string {
-        return input;
+    solveForPartTwo(input: string): number {
+        const cards = splitLines(input);
+
+        let i = 0, cardsLength = cards.length;
+        while (i < cardsLength) {
+            const card = cards[i];
+            const [firstHalf, secondHalf] = card.split('|');
+            
+            // split winning numbers from my numbers    
+            const winningNumbers = firstHalf
+                .split(':')[1]
+                .split(/\s+/)
+                .filter(val => val); // ensure not empty
+            
+            const myNumbers = secondHalf
+                .split(/\s+/)
+                .filter(val => val); // ensure not empty
+            
+            // count how many winning numbers i have
+            const winningAmt = winningNumbers.filter(winning => myNumbers.includes(winning)).length;
+
+            // add the next [winningAmt] cards to cards list
+            for (let j = 1; j <= winningAmt; j++) {
+                const cardNumber = parseInt(card.substring(5, card.indexOf(':')));
+                const cardIndex = cardNumber - 1;
+                cards.push(cards[cardIndex + j]);
+            }
+            
+            cardsLength = cards.length;
+            i++;
+        }
+
+        return cards.length;
     }
 }
 
