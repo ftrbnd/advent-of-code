@@ -6,19 +6,43 @@ class Day5 extends Day {
         super(5);
     }
 
-    extractMaps(input: string, mapName: string) {
-        return input
-            .trim()
-            .replace(mapName, '')
-            .split('\n')
-            .filter(val => val && val !== '\n')
-            .map(val => val.trim().split(' '))
-            .map(arr => arr.map(str => parseInt(str)).filter(num => num || num === 0))
-            .filter(arr => arr.length > 0);
+    parseInput(input: string[]) {
+        const seeds = input[0].replace('seeds: ', '').split(' ').map(val => parseInt(val));
+
+        const maps: number[][][] = [];
+
+        for (let i = 1; i < input.length; i++) {
+            if (input[i].includes('map:')) {
+                const currentMap: number[][] = [];
+
+                while (i + 1 < input.length && !input[++i].includes('map:')) {
+                    currentMap.push(input[i].split(' ').map(val => parseInt(val)));
+                } 
+
+                maps.push(currentMap);
+                i--;
+            }
+        }
+
+        return {
+            seeds,
+            seedToSoil: maps[0],
+            soilToFertilizer: maps[1],
+            fertilizerToWater: maps[2],
+            waterToLight: maps[3],
+            lightToTemperature: maps[4],
+            temperatureToHumidity: maps[5],
+            humidityToLocation: maps[6],
+        }
     }
 
-    splitMaps(input: string) {
-        let [
+    solveForPartOne(input: string): number {
+        const splitInput = input
+            .split(/\r?\n/)
+            .filter(val => val !== '')
+            .map(val => val.trim());
+        
+        const {
             seeds,
             seedToSoil,
             soilToFertilizer,
@@ -27,41 +51,13 @@ class Day5 extends Day {
             lightToTemperature,
             temperatureToHumidity,
             humidityToLocation
-        ] = input.split(/(\n|\r|\r\n){3}/).filter(val => val && (val !== '\n' && val !== '\r'));
-
-        const seedsList = seeds
-            .replace('seeds: ', '')
-            .split(' ')
-            .map(val => parseInt(val));
-        
-        const seedToSoilMap = this.extractMaps(seedToSoil, 'seed-to-soil map:');
-        const soilToFertilizerMap = this.extractMaps(soilToFertilizer, 'soil-to-fertilizer map:');
-        const fertilizerToWaterMap = this.extractMaps(fertilizerToWater, 'fertilizer-to-water map:');
-        const waterToLightMap = this.extractMaps(waterToLight, 'water-to-light map:');
-        const lightToTemperatureMap = this.extractMaps(lightToTemperature, 'light-to-temperature map:');
-        const temperatureToHumidityMap = this.extractMaps(temperatureToHumidity, 'temperature-to-humidity map:');
-        const humidityToLocationMap = this.extractMaps(humidityToLocation, 'humidity-to-location map:');
-
-        return {
-            seedsList,
-            seedToSoilMap,
-            soilToFertilizerMap,
-            fertilizerToWaterMap,
-            waterToLightMap,
-            lightToTemperatureMap,
-            temperatureToHumidityMap,
-            humidityToLocationMap
-        }
-    }
-
-    solveForPartOne(input: string): number {
-        const res = this.splitMaps(input);
+        } = this.parseInput(splitInput)
         
         return -1;
     }
 
-    solveForPartTwo(input: string): string {
-        return input;
+    solveForPartTwo(input: string): number {
+        return -1;
     }
 }
 

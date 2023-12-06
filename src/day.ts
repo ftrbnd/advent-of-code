@@ -9,16 +9,16 @@ abstract class Day {
     }
     
     async partOne(): Promise<string | number> {
-        const content = await fs.promises.readFile(`./inputs/day${this.id}/part1.txt`);
-        const result = this.solveForPartOne(content.toString());
+        const content = await fs.promises.readFile(`./inputs/day${this.id}/part1.txt`, 'utf-8');
+        const result = this.solveForPartOne(content);
         return result;
     }   
 
     abstract solveForPartOne(input: string) : string | number;
 
     async partTwo(): Promise<string | number> {
-        const content = await fs.promises.readFile(`./inputs/day${this.id}/part2.txt`);
-        const result = this.solveForPartTwo(content.toString());
+        const content = await fs.promises.readFile(`./inputs/day${this.id}/part2.txt`, 'utf-8');
+        const result = this.solveForPartTwo(content);
         return result;
     }
 
