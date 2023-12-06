@@ -36,12 +36,26 @@ class Day5 extends Day {
         }
     }
 
+    getMappedValue(seed: number, map: number[][]) {
+        for (const line of map) {
+            const [destinationStart, sourceStart, rangeLength] = line;
+
+            if (sourceStart <= seed && seed <= sourceStart + rangeLength - 1) {
+                const difference = destinationStart - sourceStart;
+                const correspondingValue = seed + difference;
+
+                return correspondingValue;
+            }
+        }
+        // Any source numbers that aren't mapped correspond to the same destination number
+        return seed;
+    }
+
     solveForPartOne(input: string): number {
         const splitInput = input
             .split(/\r?\n/)
             .filter(val => val !== '')
             .map(val => val.trim());
-        
         const {
             seeds,
             seedToSoil,
@@ -52,8 +66,21 @@ class Day5 extends Day {
             temperatureToHumidity,
             humidityToLocation
         } = this.parseInput(splitInput)
+        const locations: number[] = [];
+
+        for (const seed of seeds) {
+            const soil = this.getMappedValue(seed, seedToSoil);
+            const fertilizer = this.getMappedValue(soil, soilToFertilizer);
+            const water = this.getMappedValue(fertilizer, fertilizerToWater);
+            const light = this.getMappedValue(water, waterToLight);
+            const temperature = this.getMappedValue(light, lightToTemperature);
+            const humidity = this.getMappedValue(temperature, temperatureToHumidity);
+            const location = this.getMappedValue(humidity, humidityToLocation);
+
+            locations.push(location);
+        }
         
-        return -1;
+        return Math.min(...locations);
     }
 
     solveForPartTwo(input: string): number {
