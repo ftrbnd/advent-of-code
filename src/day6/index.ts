@@ -35,8 +35,22 @@ class Day6 extends Day {
         return winOutcomes.reduce((a, b) => a * b, 1);
     }
 
-    solveForPartTwo(input: string): string {
-        return input;
+    solveForPartTwo(input: string): number {
+        const [t, d] = splitLines(input);
+        const time = parseInt(t.split(':')[1].replaceAll(/\s+/g, ''));
+        const recordDistance = parseInt(d.split(':')[1].replaceAll(/\s+/g, ''));
+
+        let raceWins = 0;
+
+        for (let i = 0; i <= time; i++) {
+            const distance = i * (time - i);
+            
+            if (distance > recordDistance) {
+                raceWins++;
+            }
+        }
+
+        return raceWins;
     }
 }
 
