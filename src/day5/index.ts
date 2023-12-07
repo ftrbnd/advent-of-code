@@ -84,6 +84,32 @@ class Day5 extends Day {
     }
 
     solveForPartTwo(input: string): number {
+        const splitInput = input
+            .split(/\r?\n/)
+            .filter(val => val !== '')
+            .map(val => val.trim());
+        const {
+            seeds,
+            seedToSoil,
+            soilToFertilizer,
+            fertilizerToWater,
+            waterToLight,
+            lightToTemperature,
+            temperatureToHumidity,
+            humidityToLocation
+        } = this.parseInput(splitInput)
+        const mappings = [seedToSoil, soilToFertilizer, fertilizerToWater, waterToLight, lightToTemperature, temperatureToHumidity, humidityToLocation]
+
+        const pairs: number[][] = [];
+        for (let i = 0; i < seeds.length; i += 2) {
+            pairs.push([seeds[i], seeds[i] + seeds[i + 1]])
+        }
+
+        let res: number[][] = [];
+        for (const mapping of mappings) {
+            // could not figure out
+        }
+
         return -1;
     }
 }
